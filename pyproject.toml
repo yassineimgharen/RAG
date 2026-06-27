@@ -1,0 +1,18 @@
+[project]
+name = "student"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "transformers",
+    "bm25s",
+    "pydantic",
+    "fire",
+    "tqdm",
+    "torch",
+    "flake8",
+    "mypy"
+]
+
+# Python where your code lives bach il9a __main__.py
+[tool.setuptools.packages.find]
+where = ["src"]

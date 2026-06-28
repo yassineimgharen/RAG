@@ -2,12 +2,12 @@ install:
 	uv sync
 
 run:
-	uv run python -m student
+	@uv run python -m student || true
 
 lint:
-	uv run flake8 .
-	uv run mypy . --warn-return-any ...
+	@uv run flake8 .
+	@uv run mypy . --warn-return-any ...
 
 clean:
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	rm -rf .mypy_cache
+	@find . -type d -name __pycache__ -exec rm -rf {} +
+	@rm -rf .mypy_cache

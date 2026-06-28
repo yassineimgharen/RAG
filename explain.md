@@ -270,3 +270,7 @@ MinimalSearchResults       → your search results for one question
 MinimalAnswer              → your search results + your generated answer
 StudentSearchResults       → all your search results (saved to file)
 StudentSearchResultsAndAnswer → all your answers (saved to file)
+- all must extend basemodel automatic validation
+                            JSON loading/saving
+                            type checking
+

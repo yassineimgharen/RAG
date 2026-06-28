@@ -13,6 +13,12 @@ dependencies = [
     "mypy"
 ]
 
+# how to build and install your project as a package.
+# setuptools is a Python tool that takes your code and makes it installable as a package.
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 # Python where your code lives bach il9a __main__.py
 [tool.setuptools.packages.find]
 where = ["src"]

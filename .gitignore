@@ -8,7 +8,6 @@ __pycache__/
 dist/
 
 # Project specific
-data/raw/
 data/processed/
 data/output/
 *.zip

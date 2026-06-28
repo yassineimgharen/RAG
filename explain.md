@@ -107,7 +107,7 @@ read their content
 
 max size   → 2000 characters per chunk
 
-"Create a searchable index using BM25" (Index = a data structure that makes searching fast.Index = a data structure that makes searching fast.)
+"Create a searchable index using BM25" (Index = a data structure that makes searching fast)
 take all chunks
 feed them to bm25s
 build the index
@@ -274,3 +274,53 @@ StudentSearchResultsAndAnswer → all your answers (saved to file)
                             JSON loading/saving
                             type checking
 
+
+# bm25
+
+4:10 PM
+BM25 uses word matching and scoring.
+
+When you index chunks:
+
+chunk 0: "class LLMEngine handles memory allocation..."
+chunk 1: "def process_batch handles requests..."
+chunk 2: "## Memory Management PagedAttention..."
+BM25 internally builds a table:
+
+word "memory"     → appears in chunk 0, chunk 2
+word "handles"    → appears in chunk 0, chunk 1
+word "batch"      → appears in chunk 1
+word "allocation" → appears in chunk 0
+When you search "memory management":
+
+BM25 looks up:
+"memory"     → chunk 0 (1 time), chunk 2 (1 time)
+"management" → chunk 2 (1 time)
+
+scores:
+chunk 0 → score 0.6  (has "memory" but not "management")
+chunk 1 → score 0.0  (has neither)
+chunk 2 → score 0.9  (has both "memory" and "management")
+
+returns top-2: [chunk 2, chunk 0]
+In short:
+
+more matching words = higher score = higher rank
+BM25 also considers:
+
+how rare the word is (rare words matter more)
+how long the chunk is (shorter chunks ranked higher if same words)
+That's the math behind BM25 — but bm25s handles all of it automatically.
+
+Clear? Now write index function!
+
+- kholasa
+BM25 input  → question (tokenized)
+BM25 output → chunk indices + scores
+
+# index
+return:
+results, scores = retriever.retrieve(query, k=5)
+
+results → [[2, 0, 7, 15, 42]]   ← just numbers (chunk indices)
+scores  → [[0.9, 0.6, 0.5, 0.3, 0.1]]  ← relevance scores

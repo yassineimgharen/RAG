@@ -1,6 +1,6 @@
 import uuid
 from typing import List
-from pydantic import Field, BaseModel
+from pydantic import ConfigDict, Field, BaseModel
 
 
 class MinimalSource(BaseModel):
@@ -16,6 +16,7 @@ class UnansweredQuestion(BaseModel):
 
 
 class AnsweredQuestion(UnansweredQuestion):
+    model_config = ConfigDict(extra="ignore")
     sources: List[MinimalSource]
     answer: str
 

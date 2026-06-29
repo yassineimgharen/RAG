@@ -324,3 +324,51 @@ results, scores = retriever.retrieve(query, k=5)
 
 results → [[2, 0, 7, 15, 42]]   ← just numbers (chunk indices)
 scores  → [[0.9, 0.6, 0.5, 0.3, 0.1]]  ← relevance scores
+
+# overlap
+Two chunks from same file:
+file: docs/features/lora.md
+
+correct:  [============================]
+           4000                    6000
+
+yours:              [============================]
+                    5000                    7000
+
+The overlap is the shared part:
+correct:  [============================]
+           4000                    6000
+
+yours:              [============================]
+                    5000                    7000
+
+overlap:            [===============]
+                    5000        6000   = 1000 chars
+
+How to calculate overlap in code:
+pythonoverlap_start = max(4000, 5000) = 5000  # latest start
+overlap_end   = min(6000, 7000) = 6000  # earliest end
+overlap       = overlap_end - overlap_start = 1000
+
+If no overlap:
+correct:  [========]
+           0    2000
+
+yours:                    [========]
+                          4000  6000
+
+overlap_start = max(0, 4000)    = 4000
+overlap_end   = min(2000, 6000) = 2000
+overlap       = 2000 - 4000     = -2000 → negative → no overlap
+
+5% rule:
+correct size = 6000 - 4000 = 2000
+overlap = 1000
+percentage = 1000/2000 = 50% >= 5% → FOUND ✅
+
+But also must be same file:
+correct: docs/lora.md  4000-6000
+yours:   docs/lora.md  5000-7000  ← same file ✅
+
+correct: docs/lora.md  4000-6000
+yours:   vllm/engine.py 5000-7000 ← different file ❌

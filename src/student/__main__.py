@@ -1,6 +1,6 @@
 import fire
 from student import ingestion
-from student import retrieval
+from student import retrieval, evaluation
 
 
 class Student:
@@ -13,6 +13,18 @@ class Student:
         results = retrieval.search(question, k)
         for source in results:
             print(source)
+
+    def search_dataset(self, dataset_path: str,
+                       save_directory: str,
+                       k: int = 10) -> None:
+        retrieval.search_dataset(dataset_path, save_directory, k)
+
+    def evaluate(self,
+                 student_results_path: str,
+                 ground_truth_path: str,
+                 k: int = 10
+                 ) -> None:
+        evaluation.evaluate(student_results_path, ground_truth_path, k)
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ import bm25s
 from student.models import MinimalSource
 from student.models import RagDataset, MinimalSearchResults
 from student.models import StudentSearchResults
-import tqdm
+from tqdm import tqdm
 import os
 
 
@@ -59,19 +59,9 @@ def search_dataset(
         )
         results.append(result)
     output = StudentSearchResults(search_results=results, k=k)
+    # jib gha file name mn fullpath
     filename = os.path.basename(dataset_path)
     save_path = os.path.join(save_directory, filename)
     with open(save_path, "w") as f:
         f.write(output.model_dump_json(indent=2))
     print(f"Saved to {save_path}")
-
-
-
-
-
-
-#1. load dataset JSON file (UnansweredQuestions)
-#2. loop through all questions
-#3. for each question → call search()
-#4. store results as MinimalSearchResults
-#5. save all results to StudentSearchResults JSON file

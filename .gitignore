@@ -8,8 +8,6 @@ __pycache__/
 dist/
 
 # Project specific
-data/processed/
-data/output/
 *.zip
 
 # uv
@@ -19,3 +17,4 @@ data/output/
 steps.md
 explain.md
 ex.py
+eachfilework.md

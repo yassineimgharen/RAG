@@ -12,9 +12,14 @@ class Student:
         except Exception as e:
             print(f"Error during indexing: {e}")
 
-    def search(self, question: str, k: int = 5) -> None:
-        """Search for a single query."""
+    def search(self, question: str = "", k: int = 5) -> None:
         try:
+            if not question.strip():
+                print("Error: question cannot be empty")
+                return
+            if k < 1:
+                print("Error: k must be >= 1")
+                return
             results = retrieval.search(question, k)
             for source in results:
                 print(source)
@@ -40,8 +45,11 @@ class Student:
         except Exception as e:
             print(f"Error during evaluation: {e}")
 
-    def answer(self, question: str, k: int = 10) -> None:
+    def answer(self, question: str = "", k: int = 10) -> None:
         try:
+            if not question.strip():
+                print("Error: question cannot be empty")
+                return
             generation.answer(question, k)
         except Exception as e:
             print(f"Error during answer: {e}")

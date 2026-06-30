@@ -46,11 +46,13 @@ def evaluate(student_results_path: str,
 
     with open(ground_truth_path, "r") as f:
         ground_truth = RagDataset.model_validate_json(f.read())
-
     gt_dict = {}
     for question in ground_truth.rag_questions:
         gt_dict[question.question_id] = question.sources
 
+    # For Recall@1:
+    # check all 100 questions → only look at top 1 source each
+    # scores = [1.0, 0.0, 0.0, 1.0, ...] → average = 0.600
     for k_val in [1, 3, 5, 10]:
         scores = []
         for result in student_results.search_results:

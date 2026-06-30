@@ -1,5 +1,5 @@
 import fire
-from student import ingestion
+from student import generation, ingestion
 from student import retrieval, evaluation
 
 
@@ -25,6 +25,15 @@ class Student:
                  k: int = 10
                  ) -> None:
         evaluation.evaluate(student_results_path, ground_truth_path, k)
+
+    def answer(self, question: str, k: int = 10) -> None:
+        generation.answer(question, k)
+
+    def answer_dataset(self,
+                       student_search_results_path: str,
+                       save_directory: str
+                       ) -> None:
+        generation.answer_dataset(student_search_results_path, save_directory)
 
 
 if __name__ == "__main__":

@@ -318,6 +318,8 @@ Clear? Now write index function!
 BM25 input  → question (tokenized)
 BM25 output → chunk indices + scores
 
+BM25 already sorted! BM25 returns results by relevance score
+
 # index
 return:
 results, scores = retriever.retrieve(query, k=5)

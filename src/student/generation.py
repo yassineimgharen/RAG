@@ -1,7 +1,6 @@
 import os
 from typing import List
 import uuid
-import torch
 
 from tqdm import tqdm
 from src.student.models import MinimalAnswer, MinimalSource
@@ -10,18 +9,25 @@ from src.student.models import StudentSearchResults
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from student import retrieval
 
+tokenizer = None
+model = None
 
-# tokenizer → converts text to numbers (tokens) that the model understands
-# model     → the actual Qwen brain that generates answers
-tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-0.6B").to(device)
+
+def load_model():
+    global tokenizer, model
+    if tokenizer is None:
+        # tokenizer → converts text to numbers (tokens) that the model
+        # understands
+        # model     → the actual Qwen brain that generates answers
+        tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
+        model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-0.6B")
 
 
 def generate_answer(question_id: str,
                     question: str,
                     retrieved_sources: List[MinimalSource]
                     ) -> MinimalAnswer:
+    load_model()
     context_texts: str = ""
     max_context = 4000
     for i, source in enumerate(retrieved_sources):
@@ -56,7 +62,7 @@ def generate_answer(question_id: str,
         add_generation_prompt=True,
         enable_thinking=False)
     inputs = tokenizer(prompt, return_tensors="pt",
-                       truncation=True, max_length=2048).to(device)
+                       truncation=True, max_length=2048)
     input_len = inputs["input_ids"].shape[1]
     outputs = model.generate(
         **inputs, max_new_tokens=80, do_sample=False)

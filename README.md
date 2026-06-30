@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by <your_login>.*
+*This project has been created as part of the 42 curriculum by yaimghar*
 
 # RAG Against the Machine
 
@@ -63,7 +63,7 @@ Both pass the minimum thresholds: 80% recall@5 for docs and 50% for code.
 ### Installation
 
 ```bash
-git clone <repository_url>
+git clone gitlublink
 cd rag_against_the_machine
 uv sync
 ```

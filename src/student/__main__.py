@@ -48,9 +48,6 @@ class Student:
                  k: int = 10
                  ) -> None:
         try:
-            if k < 1:
-                print("Error: k must be >= 1")
-                return
             evaluation.evaluate(student_results_path,
                                 ground_truth_path, k)
         except Exception as e:

@@ -114,4 +114,4 @@ def index(max_chunk_size: int = 2000) -> None:
     save_chunks(all_chunks, chunks_path)
     save_index(retriever, index_path)
 
-    print("Ingestion complete!")
+    print("Ingestion complete! Indices saved under data/processed/")

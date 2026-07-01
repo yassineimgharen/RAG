@@ -21,6 +21,16 @@ LLM
       ▼
 Final Answer
 
+
+RAG = Retrieval + Generation
+🔍 Retrieval (البحث): كنقلبو على المعلومات فشي مصدر (PDF، DB، API…)
+🤖 Generation (التوليد): AI كيستعمل داك المعلومات ويكتب جواب مفهوم
+
+علاش  RAG مهم؟
+كيخلي AI مايكذبش بزاف
+use your data
+كيكون up-to-date
+
 # big rag example
 User:
 "How much is Dior Sauvage 100ml?"
@@ -327,6 +337,22 @@ results, scores = retriever.retrieve(query, k=5)
 results → [[2, 0, 7, 15, 42]]   ← just numbers (chunk indices)
 scores  → [[0.9, 0.6, 0.5, 0.3, 0.1]]  ← relevance scores
 
+
+شنو هو BM25؟
+👉 BM25 هو واحد الخوارزمية ديال البحث (ranking algorithm)
+bach tl9a ansab document 7asab words li f so2al
+
+ex:
+tokenized_query = bm25s.tokenize("How does vLLM handle memory?")
+# tokenized_query = ["how", "does", "vllm", "handle", "memory"]
+
+results, scores = retriever.retrieve(tokenized_query, k=5)
+# results = [[2847, 156, 9043, 521, 78]]  ← chunk indices
+# scores  = [[0.95, 0.82, 0.71, 0.55, 0.42]]  ← relevance scores
+
+tokenized_query → the question split into words (input)
+results         → which chunks are most relevant (output)
+scores          → how relevant each chunk is (output)
 # overlap
 Two chunks from same file:
 file: docs/features/lora.md
@@ -374,3 +400,33 @@ yours:   docs/lora.md  5000-7000  ← same file ✅
 
 correct: docs/lora.md  4000-6000
 yours:   vllm/engine.py 5000-7000 ← different file ❌
+
+
+# recall@k
+When k_val = 5:
+question 1 → check top 5 sources → found? → 1.0
+question 2 → check top 5 sources → not found? → 0.0
+question 3 → check top 5 sources → found? → 1.0
+...
+question 100 → check top 5 sources → found? → 1.0
+
+scores = [1.0, 0.0, 1.0, ..., 1.0]
+recall@5 = sum(scores) / 100 = 0.820
+Same loop runs 4 times — once for each k value:
+k_val=1  → check top 1 source per question  → Recall@1: 0.600
+k_val=3  → check top 3 sources per question → Recall@3: 0.760
+k_val=5  → check top 5 sources per question → Recall@5: 0.820
+k_val=10 → check top 10 sources per question → Recall@10: 0.860
+
+
+# QWEN
+BM25 found these 5 chunks (sorted by relevance):
+1. docs/usage/reproducibility.md [0:1000]      ← most relevant
+2. tests/utils.py [14000:15000]
+3. examples/offline_inference/reproducibility.py [0:1000]
+4. .buildkite/nightly-benchmarks/README.md [6000:7000]
+5. tests/tool_use/utils.py [8000:9000]
+
+Qwen read top chunks (until max_context=4000)
+→ found the answer in reproducibility.md
+→ generated: "set the global seed for V0 and turn off multiprocessing for V1"

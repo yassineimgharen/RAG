@@ -36,6 +36,7 @@ def search(question: str, k: int = 5) -> List[MinimalSource]:
         retriever = load_index("data/processed/bm25_index/index.pkl")
         tokenized_query = bm25s.tokenize(question)
         results, scores = retriever.retrieve(tokenized_query, k=k)
+        # topk chunks fin n9dr l9a ljawab
         sources = []
         for idx in results[0]:
             chunk = chunks[idx]
